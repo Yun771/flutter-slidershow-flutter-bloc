@@ -1,11 +1,25 @@
 part of 'slideshow_cubit.dart';
 
+enum SlideshowEvent {
+  updatedPage,
+  noUpdatedPage,
+}
+
+enum SlideshowPageStatus {
+  initial,
+  inProgress,
+  finished,
+}
+
 class SlideshowState extends Equatable {
   final double currentPage;
   final Color primaryColor;
   final Color secondaryColor;
   final double primaryBullet;
   final double secondaryBullet;
+  final int pageViewIndex;
+  final SlideshowEvent event;
+  final SlideshowPageStatus pageStatus;
 
   const SlideshowState({
     this.currentPage = 0,
@@ -13,6 +27,9 @@ class SlideshowState extends Equatable {
     this.secondaryColor = Colors.grey,
     this.primaryBullet = 0,
     this.secondaryBullet = 0,
+    this.pageViewIndex = 0,
+    this.event = SlideshowEvent.noUpdatedPage,
+    this.pageStatus = SlideshowPageStatus.initial,
   });
 
   SlideshowState copyWith({
@@ -21,6 +38,9 @@ class SlideshowState extends Equatable {
     Color? secondaryColor,
     double? primaryBullet,
     double? secondaryBullet,
+    int? pageViewIndex,
+    SlideshowEvent? event,
+    SlideshowPageStatus? pageStatus,
   }) =>
       SlideshowState(
         currentPage: currentPage ?? this.currentPage,
@@ -28,6 +48,9 @@ class SlideshowState extends Equatable {
         secondaryColor: secondaryColor ?? this.secondaryColor,
         primaryBullet: primaryBullet ?? this.primaryBullet,
         secondaryBullet: secondaryBullet ?? this.secondaryBullet,
+        pageViewIndex: pageViewIndex ?? this.pageViewIndex,
+        event: event ?? this.event,
+        pageStatus: pageStatus ?? this.pageStatus,
       );
 
   @override
@@ -37,5 +60,8 @@ class SlideshowState extends Equatable {
         secondaryColor,
         primaryBullet,
         secondaryBullet,
+        pageViewIndex,
+        event,
+        pageStatus,
       ];
 }

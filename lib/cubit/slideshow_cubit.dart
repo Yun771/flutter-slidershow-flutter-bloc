@@ -8,7 +8,9 @@ class SlideshowCubit extends Cubit<SlideshowState> {
   SlideshowCubit() : super(const SlideshowState());
 
   void onBulletSelected(double index) {
-    emit(state.copyWith(currentPage: index));
+    emit(state.copyWith(
+      currentPage: index,
+    ));
   }
 
   void onPrimaryColorSelected(Color color) {
@@ -32,7 +34,26 @@ class SlideshowCubit extends Cubit<SlideshowState> {
   }
 
   void currentPage(double currentPage) {
-    emit(state.copyWith(currentPage: currentPage));
+    emit(
+      state.copyWith(
+        currentPage: currentPage,
+        event: SlideshowEvent.noUpdatedPage,
+        pageStatus: state.pageStatus == SlideshowPageStatus.finished
+            ? null
+            : SlideshowPageStatus.inProgress,
+      ),
+    );
+  }
+
+  void pageViewIndex(int pageViewIndex) {
+    emit(state.copyWith(
+      pageViewIndex: pageViewIndex,
+      currentPage: pageViewIndex.toDouble(),
+      event: SlideshowEvent.updatedPage,
+      pageStatus: state.pageStatus == SlideshowPageStatus.finished
+          ? null
+          : SlideshowPageStatus.inProgress,
+    ));
   }
 
   void setState({
@@ -49,5 +70,10 @@ class SlideshowCubit extends Cubit<SlideshowState> {
       primaryBullet: primaryBullet,
       secondaryBullet: secondaryBullet,
     ));
+  }
+
+  void lastPage() {
+    if (state.pageStatus == SlideshowPageStatus.finished) return;
+    emit(state.copyWith(pageStatus: SlideshowPageStatus.finished));
   }
 }

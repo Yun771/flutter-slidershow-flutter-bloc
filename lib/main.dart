@@ -15,84 +15,108 @@ class MyApp extends StatelessWidget {
         appBar: AppBar(
           title: const Text('Material App Bar'),
         ),
-        body: Stack(
-          children: [
-            Slideshow(
-              primaryBullet: 20,
-              secondaryBullet: 10,
-              primaryColor: Colors.green,
-              secondaryColor: Colors.grey,
-              slides: [
-                SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      SvgPicture.asset(
-                        'assets/1.svg',
-                        height: 300,
-                      ),
-                      const Text(
-                          'Tempor non duis id voluptate tempor eu fugiat aliqua commodo. Consequat laborum qui nisi magna ex incididunt amet deserunt labore. Minim qui culpa reprehenderit cupidatat amet.'),
-                    ],
+        body: const OnBoarding(),
+      ),
+    );
+  }
+}
+
+class OnBoarding extends StatefulWidget {
+  const OnBoarding({
+    super.key,
+  });
+
+  @override
+  State<OnBoarding> createState() => _OnBoardingState();
+}
+
+class _OnBoardingState extends State<OnBoarding> {
+  bool _isFinished = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        Slideshow(
+          primaryBullet: 20,
+          secondaryBullet: 10,
+          primaryColor: Colors.green,
+          secondaryColor: Colors.grey,
+          onFinished: () {
+            print('Finished');
+            setState(() {
+              _isFinished = true;
+            });
+          },
+          slides: [
+            SingleChildScrollView(
+              child: Column(
+                children: [
+                  SvgPicture.asset(
+                    'assets/1.svg',
+                    height: 300,
                   ),
-                ),
-                SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      SvgPicture.asset('assets/2.svg'),
-                      const Text(
-                          'Tempor non duis id voluptate tempor eu fugiat aliqua commodo. Consequat laborum qui nisi magna ex incididunt amet deserunt labore. Minim qui culpa reprehenderit cupidatat amet.'),
-                    ],
-                  ),
-                ),
-                SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      SvgPicture.asset('assets/3.svg'),
-                      const Text(
-                          'Tempor non duis id voluptate tempor eu fugiat aliqua commodo. Consequat laborum qui nisi magna ex incididunt amet deserunt labore. Minim qui culpa reprehenderit cupidatat amet.'),
-                    ],
-                  ),
-                ),
-                SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      SvgPicture.asset('assets/4.svg'),
-                      const Text(
-                          'Tempor non duis id voluptate tempor eu fugiat aliqua commodo. Consequat laborum qui nisi magna ex incididunt amet deserunt labore. Minim qui culpa reprehenderit cupidatat amet.'),
-                    ],
-                  ),
-                ),
-                SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      SvgPicture.asset('assets/5.svg'),
-                      const Text(
-                          'Tempor non duis id voluptate tempor eu fugiat aliqua commodo. Consequat laborum qui nisi magna ex incididunt amet deserunt labore. Minim qui culpa reprehenderit cupidatat amet.'),
-                    ],
-                  ),
-                ),
-              ],
+                  const Text(
+                      'Tempor non duis id voluptate tempor eu fugiat aliqua commodo. Consequat laborum qui nisi magna ex incididunt amet deserunt labore. Minim qui culpa reprehenderit cupidatat amet.'),
+                ],
+              ),
             ),
-            Positioned(
-              bottom: 20,
-              right: 0,
-              child: Ink(
-                decoration: const BoxDecoration(
-                  color: Colors.green,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(10),
-                    bottomLeft: Radius.circular(10),
-                  ),
-                ),
-                child: const Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Text('Salir'),
-                ),
+            SingleChildScrollView(
+              child: Column(
+                children: [
+                  SvgPicture.asset('assets/2.svg'),
+                  const Text(
+                      'Tempor non duis id voluptate tempor eu fugiat aliqua commodo. Consequat laborum qui nisi magna ex incididunt amet deserunt labore. Minim qui culpa reprehenderit cupidatat amet.'),
+                ],
+              ),
+            ),
+            SingleChildScrollView(
+              child: Column(
+                children: [
+                  SvgPicture.asset('assets/3.svg'),
+                  const Text(
+                      'Tempor non duis id voluptate tempor eu fugiat aliqua commodo. Consequat laborum qui nisi magna ex incididunt amet deserunt labore. Minim qui culpa reprehenderit cupidatat amet.'),
+                ],
+              ),
+            ),
+            SingleChildScrollView(
+              child: Column(
+                children: [
+                  SvgPicture.asset('assets/4.svg'),
+                  const Text(
+                      'Tempor non duis id voluptate tempor eu fugiat aliqua commodo. Consequat laborum qui nisi magna ex incididunt amet deserunt labore. Minim qui culpa reprehenderit cupidatat amet.'),
+                ],
+              ),
+            ),
+            SingleChildScrollView(
+              child: Column(
+                children: [
+                  SvgPicture.asset('assets/5.svg'),
+                  const Text(
+                      'Tempor non duis id voluptate tempor eu fugiat aliqua commodo. Consequat laborum qui nisi magna ex incididunt amet deserunt labore. Minim qui culpa reprehenderit cupidatat amet.'),
+                ],
               ),
             ),
           ],
         ),
-      ),
+        Positioned(
+          bottom: 20,
+          right: 0,
+          child: Ink(
+            decoration: const BoxDecoration(
+              color: Colors.green,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(10),
+                bottomLeft: Radius.circular(10),
+              ),
+            ),
+            child: const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text('Salir'),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

@@ -11,6 +11,7 @@ class Slideshow extends StatelessWidget {
     this.secondaryColor = Colors.grey,
     this.primaryBullet = 12,
     this.secondaryBullet = 12,
+    this.onFinished,
   });
 
   final List<Widget> slides;
@@ -19,6 +20,7 @@ class Slideshow extends StatelessWidget {
   final Color secondaryColor;
   final double primaryBullet;
   final double secondaryBullet;
+  final void Function()? onFinished;
 
   @override
   Widget build(BuildContext context) {
@@ -33,9 +35,20 @@ class Slideshow extends StatelessWidget {
                   primaryBullet: primaryBullet,
                   secondaryBullet: secondaryBullet,
                 );
-            return _BuildStructureSlideshow(
-              slides: slides,
-              dotsTop: dotsTop,
+            return BlocListener<SlideshowCubit, SlideshowState>(
+              listenWhen: (previous, current) =>
+                  (previous.pageStatus == SlideshowPageStatus.inProgress ||
+                      previous.pageStatus == SlideshowPageStatus.initial) &&
+                  current.pageStatus == SlideshowPageStatus.finished,
+              listener: (context, state) {
+                if (state.pageStatus == SlideshowPageStatus.finished) {
+                  onFinished?.call();
+                }
+              },
+              child: _BuildStructureSlideshow(
+                slides: slides,
+                dotsTop: dotsTop,
+              ),
             );
           }),
         ),
@@ -108,15 +121,19 @@ class _Dot extends StatelessWidget {
     }
 
     return AnimatedContainer(
-      duration: const Duration(milliseconds: 200),
-      width: tamano,
-      height: tamano,
-      margin: const EdgeInsets.symmetric(horizontal: 5),
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: color,
-      ),
-    );
+        duration: const Duration(milliseconds: 200),
+        width: tamano,
+        height: tamano,
+        margin: const EdgeInsets.symmetric(horizontal: 5),
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: color,
+        ),
+        child: GestureDetector(
+          onTap: () {
+            context.read<SlideshowCubit>().pageViewIndex(index);
+          },
+        ));
   }
 }
 
@@ -136,6 +153,9 @@ class __SlidesState extends State<_Slides> {
   void initState() {
     pageController.addListener(() {
       context.read<SlideshowCubit>().currentPage(pageController.page ?? 0);
+      if (pageController.page == widget.slides.length - 1) {
+        context.read<SlideshowCubit>().lastPage();
+      }
     });
     super.initState();
   }
@@ -148,9 +168,20 @@ class __SlidesState extends State<_Slides> {
 
   @override
   Widget build(BuildContext context) {
-    return PageView(
-      controller: pageController,
-      children: widget.slides.map((slide) => _Slide(slide: slide)).toList(),
+    return BlocListener<SlideshowCubit, SlideshowState>(
+      listener: (context, state) {
+        if (state.event == SlideshowEvent.updatedPage) {
+          pageController.animateToPage(
+            state.pageViewIndex,
+            duration: const Duration(milliseconds: 100),
+            curve: Curves.easeInOut,
+          );
+        }
+      },
+      child: PageView(
+        controller: pageController,
+        children: widget.slides.map((slide) => _Slide(slide: slide)).toList(),
+      ),
     );
   }
 }
