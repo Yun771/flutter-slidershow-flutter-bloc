@@ -173,7 +173,7 @@ class __SlidesState extends State<_Slides> {
         if (state.event == SlideshowEvent.updatedPage) {
           pageController.animateToPage(
             state.pageViewIndex,
-            duration: const Duration(milliseconds: 100),
+            duration: const Duration(milliseconds: 1000),
             curve: Curves.easeInOut,
           );
         }
